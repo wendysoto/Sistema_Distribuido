@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,11 +33,69 @@ public class Menu extends javax.swing.JFrame {
        PanelActualizar.setVisible(false);
        PanelConsulta.setVisible(false);
        PanelEliminar.setVisible(false);  
-       
-       
-           
- 
+       CrearModelo();
+        
+     
     }
+    DefaultTableModel modelo2;
+
+    private void CrearModelo() {
+        try {
+            modelo2 = (new DefaultTableModel(
+                    null, new String[]{
+                        "codigo", "Nombre",
+                        "precio", "descrip"}) {
+                Class[] types = new Class[]{
+                    java.lang.String.class,
+                    java.lang.String.class,
+                    java.lang.String.class,
+                    java.lang.String.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, false, false, false
+                };
+
+                @Override
+                public Class getColumnClass(int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIndex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            tblConsulta.setModel(modelo2);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error2");
+        }
+    }
+     public void cargarInfo(){
+            EntityManagerFactory emf=Persistence.createEntityManagerFactory("practicabdd");
+            
+            ProductoJpaController pjc=new ProductoJpaController(emf);          
+        
+         try{
+             
+             System.out.println("esto es prueba");
+             Object o[]=null;
+             List<Producto> listProd=pjc.findProductoEntities();
+             
+             for(int i=0; i<listProd.size(); i++){               
+               
+               modelo2.addRow(o);
+               modelo2.setValueAt(listProd.get(i).getCodigo(), i, 0);
+               modelo2.setValueAt(listProd.get(i).getNombre(), i, 1);
+               modelo2.setValueAt(listProd.get(i).getPrecio(), i, 2);
+               modelo2.setValueAt(listProd.get(i).getDescripcion(), i, 3);
+           }
+                          
+         }catch(Exception e){
+             JOptionPane.showMessageDialog(null, e.getMessage());
+         }
+         
+         
+     }
     
     
     
@@ -174,7 +233,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnGuardar)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         PanelConsulta.setBackground(new java.awt.Color(204, 204, 255));
@@ -197,14 +256,13 @@ public class Menu extends javax.swing.JFrame {
         PanelConsulta.setLayout(PanelConsultaLayout);
         PanelConsultaLayout.setHorizontalGroup(
             PanelConsultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
         );
         PanelConsultaLayout.setVerticalGroup(
             PanelConsultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelConsultaLayout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         PanelEliminar.setBackground(new java.awt.Color(255, 204, 204));
@@ -343,38 +401,43 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(249, 249, 249)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(PanelRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(PanelConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PanelEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(PanelActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(PanelEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(PanelActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(340, 340, 340)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(332, 332, 332)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                            .addComponent(cmbmenu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(123, 123, 123)
+                        .addComponent(PanelConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(7, 7, 7)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(cmbmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(PanelActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PanelEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(PanelRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(41, 41, 41)
+                .addComponent(PanelConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -390,83 +453,33 @@ public class Menu extends javax.swing.JFrame {
         String opcion=cmbmenu.getSelectedItem().toString();
         if(opcion.equals("INGRESAR")){
             PanelRegistro.setVisible(true);
-            PanelActualizar.setVisible(false);
-            PanelConsulta.setVisible(false);
+            PanelActualizar.setVisible(false);            
             PanelEliminar.setVisible(false);
+             PanelConsulta.setVisible(false);
         }
         if(opcion.equals("ELIMINAR")){
             PanelEliminar.setVisible(true);
             PanelRegistro.setVisible(false);
             PanelActualizar.setVisible(false);
-            PanelConsulta.setVisible(false);
+           PanelConsulta.setVisible(false);
             
         }
         if(opcion.equals("LISTAR")){
-            PanelConsulta.setVisible(true);
+            
             PanelEliminar.setVisible(false);
             PanelRegistro.setVisible(false);
             PanelActualizar.setVisible(false);
+            PanelConsulta.setVisible(true);
+            cargarInfo();
             
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn ("codigo");
-        model.addColumn("nombre");
-        model.addColumn("precio");
-        model.addColumn("descripción");
-        tblConsulta.setModel(model);
-        String [] dato=new String[3];
-        
-           
-        /*Object obj[]=null;
-           List <Producto>listProd=Producto.findProductoEntities();
-           
-           for(int i=0; i<listProd.size(); i++){
-               System.out.println("la lista de elementos son: "+listProd.get(i).getDescripcion());
-           }*/
-        
-        
-        
-         
-            /*
-             String sql="select *from productos";
-        Statement st;
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn ("codigo");
-        model.addColumn("nombre");
-        model.addColumn("precio");
-        tabla1.setModel(model);
-        String [] dato=new String[3];
-        
-        
-        //st=conexion.createStatement();
-        try  {
-            st=conexion.createStatement();
-            //EL executeUpdate ES LA EJECUCIÓN DE LA SENTENCIA
-            ResultSet result=st.executeQuery(sql);
-            while(result.next()){
-                dato[0]=result.getString(1);
-                dato[1]=result.getString(2);
-                dato[2]=result.getString(3);
-                model.addRow(dato);
-                System.out.println(result.getString(1));
-                System.out.println(result.getString(2));
-            }
-            
-            
-        } catch (Exception e) {
-            
-            e.printStackTrace();
-        }     
-            */
-            
-            
-            
-            
+     
         }
         if(opcion.equals("ACTUALIZAR")){
             PanelEliminar.setVisible(false);
             PanelRegistro.setVisible(false);
             PanelActualizar.setVisible(true);
             PanelConsulta.setVisible(false);
+           
         }
         
     }//GEN-LAST:event_cmbmenuActionPerformed
@@ -498,12 +511,15 @@ public class Menu extends javax.swing.JFrame {
             
             //Double precio=500.9;
             //BigDecimal bd1=BigDecimal.valueOf(precio);
-            p.setPrecio(bd1);
-            
+            p.setPrecio(bd1);            
             p.setDescripcion(descripcion);
             
              try {
             pjc.create(p);
+            txtCod.setText("");
+            txtNom.setText("");
+            txtPrecio.setText("");
+            txtDescrip.setText("");
         } catch (Exception ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
                  System.out.println(ex.getMessage());
@@ -541,6 +557,10 @@ public class Menu extends javax.swing.JFrame {
          
         try {
             pjc.edit(p);
+            inputCodigo.setText("");
+            inputNombre.setText("");
+            inputPrecio.setText("");
+            inputDescripcion.setText("");
         } catch (Exception ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -558,10 +578,10 @@ public class Menu extends javax.swing.JFrame {
         String codigo = txtCod1.getText();
         int cod = Integer.parseInt(codigo);
       
-         
-        
         try {
             pjc.destroy(cod);
+            txtCod1.setText("");
+            
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
